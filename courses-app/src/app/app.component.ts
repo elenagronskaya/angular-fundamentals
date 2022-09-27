@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {IMockedCoursesList, mockedCoursesList} from "../mocked-data";
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'courses-app';
+  courses: IMockedCoursesList[] = [];
+  isEditable: boolean = false;
+
+  ngOnInit(): void {
+    this.courses = mockedCoursesList;
+    this.isEditable = true;
+  }
 }

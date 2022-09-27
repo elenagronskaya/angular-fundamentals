@@ -1,14 +1,27 @@
 import {NgModule} from "@angular/core";
-import {CourseComponent} from "../features/course/course.component";
+import {HeaderComponent} from "./components/header/header.component";
+import {ButtonComponent} from "./components/button/button.component";
+import {InfoComponent} from "./components/info/info.component";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {NgClass, NgIf} from "@angular/common";
 
 
 @NgModule({
-  imports: [],
+  imports: [
+    FontAwesomeModule,
+    NgIf,
+    NgClass,
+  ],
   declarations: [
-    CourseComponent
+    HeaderComponent,
+    ButtonComponent,
+    InfoComponent,
   ],
   exports: [
-    CourseComponent
+    HeaderComponent,
+    ButtonComponent,
+    InfoComponent,
+    FontAwesomeModule,
   ],
 })
 export class SharedModule { }

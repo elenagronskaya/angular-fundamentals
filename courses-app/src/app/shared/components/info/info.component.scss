@@ -1,0 +1,22 @@
+.info-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  margin-top: 55px;
+
+}
+
+.title {
+  font-size: 30px;
+  font-weight: 700;
+  font-family: "Source Code Pro", sans-serif;
+  text-transform: uppercase;
+  margin: 15px 0;
+}
+
+.text {
+  font-size: 20px;
+  font-weight: 400;
+  font-family: "Source Code Pro", sans-serif;
+}
