@@ -1,0 +1,21 @@
+<div>
+  <app-info *ngIf="!courses || courses.length === 0" [title]="'Your list is empty'"
+            [text]="'Please use the \'\'Add new course\'\' button to add your first course'">
+    <app-button [text]="'Add new course'" ></app-button>
+  </app-info>
+  <app-button *ngIf="courses && courses.length > 0" [text]="'Add new course'" >
+  </app-button>
+  <div *ngFor="let course of courses">
+    <app-course
+      [title]="course.title"
+      [description]="course.description"
+      [created]="course.created"
+      [duration]="course.duration"
+      [authors]="course.authors"
+    >
+      <app-button [text]="'Show course'" ></app-button>
+      <app-button *ngIf="isEditable" [fontawesome]=faPen></app-button>
+      <app-button *ngIf="isEditable" [fontawesome]=faTrash></app-button>
+    </app-course>
+  </div>
+</div>
