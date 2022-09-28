@@ -8,3 +8,14 @@
   font-family: "Source Code Pro", sans-serif;
   height: 45px;
 }
+.button:hover {
+  border: 2px solid #c51717;
+}
+
+.button:focus {
+  transform: scale(1.2);
+}
+
+.button:active {
+  background-color: beige;
+}
