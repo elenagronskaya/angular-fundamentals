@@ -1,0 +1,14 @@
+<div class="card-container">
+  <div class="title-wrapper">
+    <p class="title">{{title}}</p>
+    <p class="description">{{description}}</p>
+  </div>
+  <div class="description-wrapper">
+    <p class="description"><span class="subtitle">Authors: </span>{{authors??''}}</p>
+    <p class="description"><span class="subtitle">Duration: </span>{{duration? dataFormat(duration): ''}}</p>
+    <p class="description"><span class="subtitle">Created: </span>{{courseCreated}}</p>
+    <div class="button-wrapper">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
