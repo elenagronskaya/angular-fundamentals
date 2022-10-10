@@ -7,7 +7,7 @@ import {
 
 export function emailValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const regExResult = /^\w+(\.-]?\w+)*@\w+(\.-]?\w+)*(\.\w{2,3})+$/.test(control.value);
+    const regExResult = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(control.value);
     return regExResult ?  null : {"errorText": {value: "Email is invalid"}} ;
   };
 }
@@ -25,6 +25,6 @@ export function emailValidator(): ValidatorFn {
 
 export class EmailValidatorDirective implements Validator {
   validate(control: AbstractControl): ValidationErrors | null {
-    return emailValidator();
+    return emailValidator()(control);
   }
 }

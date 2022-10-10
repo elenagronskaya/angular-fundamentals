@@ -1,11 +1,10 @@
-<form class="login" #loginForm="ngForm">
+<form class="login" #loginForm="ngForm" (ngSubmit)="onLoginSubmit(loginForm)" >
   <h2 class="title">Login</h2>
   <label class="label">Email
     <input type="text" name="email" emailValidation class="form-control" [(ngModel)]="email" #emailNgModel="ngModel"  required />
     <span
-      class="invalid-feedback"  *ngIf="(emailNgModel.touched || emailNgModel.dirty) && loginForm.submitted && emailNgModel.errors"
-    >
-    {{emailNgModel.errors["errorText"].value}}
+      class="invalid-feedback"   *ngIf="(emailNgModel.touched || emailNgModel.dirty) && loginForm.submitted && emailNgModel.errors">
+      {{emailNgModel.errors["errorText"].value}}
     </span>
   </label>
 
@@ -21,9 +20,10 @@
   <div class="form-group">
     <div class="button-wrapper">
       <app-button [text]="'Login'"></app-button>
+
     </div>
     <p class="text">
-      If you not have an account you can <a href="/register" class="btn-link">Register</a>
+      If you not have an account you can <a href="" class="btn-link">Register</a>
     </p>
   </div>
 </form>

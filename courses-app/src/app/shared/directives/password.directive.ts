@@ -22,6 +22,6 @@ export function passwordValidator(): ValidatorFn {
 })
 export class PasswordValidatorDirective implements Validator {
   validate(control: AbstractControl): ValidationErrors | null {
-    return passwordValidator();
+    return passwordValidator()(control);
   }
 }

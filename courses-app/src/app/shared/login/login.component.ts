@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-login',
@@ -13,4 +14,11 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onLoginSubmit(loginForm: NgForm) {
+    if (loginForm.status === "VALID")
+    {
+      alert(JSON.stringify(loginForm.value, null, 2));
+      //redirect
+    }
+  }
 }

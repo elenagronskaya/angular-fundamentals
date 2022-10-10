@@ -10,6 +10,7 @@ import {PasswordValidatorDirective} from "./directives/password.directive";
 import {FormsModule} from "@angular/forms";
 import {DurationToTimePipe} from "./pipes/duration.pipe";
 import {CreatedCourseTimePipe} from "./pipes/created-course.pipe";
+import {JoinPipe} from "./pipes/join.pipe";
 
 
 
@@ -28,7 +29,8 @@ import {CreatedCourseTimePipe} from "./pipes/created-course.pipe";
     EmailValidatorDirective,
     PasswordValidatorDirective,
     DurationToTimePipe,
-    CreatedCourseTimePipe
+    CreatedCourseTimePipe,
+    JoinPipe
   ],
   exports: [
     HeaderComponent,
@@ -39,7 +41,8 @@ import {CreatedCourseTimePipe} from "./pipes/created-course.pipe";
     EmailValidatorDirective,
     PasswordValidatorDirective,
     DurationToTimePipe,
-    CreatedCourseTimePipe
+    CreatedCourseTimePipe,
+    JoinPipe
   ],
 })
 export class SharedModule { }

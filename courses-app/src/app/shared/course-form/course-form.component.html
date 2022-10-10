@@ -1,12 +1,12 @@
-<form class="form-wrapper" #ngFormCourse="ngForm" [formGroup]="formGroupCourse" (ngSubmit)="onFormSubmit()">
+<form class="form-wrapper" [formGroup]="formGroupCourse" (ngSubmit)="onFormSubmit()">
   <div class="title-wrapper">
     <div class="input-wrapper">
       <label class="label">Title
       <input type="text" formControlName="title" required class="input" placeholder="Enter title..." >
-      <div *ngIf="title?.invalid && (ngFormCourse.submitted || title?.touched)"
+      <div *ngIf="title?.invalid && title?.touched"
            class="alert alert-danger">
         <div *ngIf="title?.errors?.['required']" class="invalid-feedback">
-          Name is required.
+          Title is required.
         </div>
       </div>
       </label>
@@ -15,20 +15,20 @@
   </div>
   <label class="label">Description
     <textarea type="text" formControlName="description" required class="textarea" placeholder="Enter description..."></textarea>
-    <div *ngIf="description?.invalid && (ngFormCourse.submitted || description?.touched)"
+    <div *ngIf="description?.invalid && description?.touched"
          class="alert alert-danger">
       <div *ngIf="description?.errors?.['required']" class="invalid-feedback">
-        Name is required.
+        Description is required.
       </div>
     </div>
   </label>
-  <form class="forms-container" #ngFormAuthor="ngForm" [formGroup]="formGroupAuthor" (ngSubmit)="onAuthorFormSubmit()">
+  <form class="forms-container" [formGroup]="formGroupAuthor" (ngSubmit)="onAuthorFormSubmit()">
     <div>
       <p class="title">Add authors</p>
       <div class="input-wrapper">
         <label class="label">Author name</label>
         <input class="input-grid" formControlName="authorName" type="text" >
-        <div *ngIf="authorName?.invalid && (ngFormAuthor.submitted || authorName?.touched)"
+        <div *ngIf="authorName?.invalid &&  authorName?.touched"
              class="alert alert-danger">
           <div *ngIf="authorName?.errors?.['required']" class="invalid-feedback">
             Name is required.
@@ -51,10 +51,10 @@
       <div class="input-wrapper">
         <label class="label">Duration</label>
         <input type="number" class="input-grid" formControlName="duration" required (input)="inputHandler($event)">
-        <div *ngIf="duration?.invalid && (ngFormCourse.submitted || duration?.touched)"
+        <div *ngIf="duration?.invalid && duration?.touched"
              class="alert alert-danger">
           <div *ngIf="duration?.errors?.['required']" class="invalid-feedback">
-            Name is required.
+            Duration is required.
           </div>
         </div>
       </div>
