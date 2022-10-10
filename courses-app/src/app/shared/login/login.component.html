@@ -1,0 +1,29 @@
+<form class="login" #loginForm="ngForm">
+  <h2 class="title">Login</h2>
+  <label class="label">Email
+    <input type="text" name="email" emailValidation class="form-control" [(ngModel)]="email" #emailNgModel="ngModel"  required />
+    <span
+      class="invalid-feedback"  *ngIf="(emailNgModel.touched || emailNgModel.dirty) && loginForm.submitted && emailNgModel.errors"
+    >
+    {{emailNgModel.errors["errorText"].value}}
+    </span>
+  </label>
+
+  <label class="label">Password
+    <input type="password" name="password" passwordValidation class="form-control" [(ngModel)]="password" #passwordNgModel="ngModel" required/>
+    <span
+      class="invalid-feedback"  *ngIf="(passwordNgModel.touched || passwordNgModel.dirty) && loginForm.submitted && passwordNgModel.errors"
+    >
+    {{passwordNgModel.errors["errorText"].value}}
+    </span>
+  </label>
+
+  <div class="form-group">
+    <div class="button-wrapper">
+      <app-button [text]="'Login'"></app-button>
+    </div>
+    <p class="text">
+      If you not have an account you can <a href="/register" class="btn-link">Register</a>
+    </p>
+  </div>
+</form>

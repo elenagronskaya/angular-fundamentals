@@ -1,3 +1,4 @@
+<app-search (onSearch)="onSearch($event)" placeholder="Search courses..."></app-search>
 <div>
   <app-info *ngIf="!courses || courses.length === 0" [title]="'Your list is empty'"
             [text]="'Please use the \'\'Add new course\'\' button to add your first course'">
