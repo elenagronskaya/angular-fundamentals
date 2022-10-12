@@ -3,7 +3,7 @@
   <label class="label">Email
     <input type="text" name="email" emailValidation class="form-control" [(ngModel)]="email" #emailNgModel="ngModel"  required />
     <span
-      class="invalid-feedback"   *ngIf="(emailNgModel.touched || emailNgModel.dirty) && loginForm.submitted && emailNgModel.errors">
+      class="invalid-feedback"   *ngIf="(emailNgModel.touched || loginForm.submitted) && emailNgModel.errors">
       {{emailNgModel.errors["errorText"].value}}
     </span>
   </label>
@@ -11,7 +11,7 @@
   <label class="label">Password
     <input type="password" name="password" passwordValidation class="form-control" [(ngModel)]="password" #passwordNgModel="ngModel" required/>
     <span
-      class="invalid-feedback"  *ngIf="(passwordNgModel.touched || passwordNgModel.dirty) && loginForm.submitted && passwordNgModel.errors"
+      class="invalid-feedback"  *ngIf="(passwordNgModel.touched || loginForm.submitted) && passwordNgModel.errors"
     >
     {{passwordNgModel.errors["errorText"].value}}
     </span>
