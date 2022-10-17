@@ -4,9 +4,9 @@
     <p class="description">{{description}}</p>
   </div>
   <div class="description-wrapper">
-    <p class="description"><span class="subtitle">Authors: </span>{{authors??''}}</p>
-    <p class="description"><span class="subtitle">Duration: </span>{{duration? dataFormat(duration): ''}}</p>
-    <p class="description"><span class="subtitle">Created: </span>{{courseCreated}}</p>
+    <p class="description"><span class="subtitle">Authors: </span>{{authors?? [] | join}}</p>
+    <p class="description"><span class="subtitle">Duration: </span>{{duration?? 0 | durationToTime}}</p>
+    <p class="description"><span class="subtitle">Created: </span>{{created ?? '' | createdCourseTime}}</p>
     <div class="button-wrapper">
       <ng-content></ng-content>
     </div>

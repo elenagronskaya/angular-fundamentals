@@ -1,0 +1,5 @@
+<form class="input-wrapper" #searchForm="ngForm" (ngSubmit)="onSubmit(searchForm.value)" >
+  <label for="search"></label>
+  <input id="search" type="text" name="searchFilter" ngModel autocomplete="off" class="input" placeholder={{placeholder}}>
+  <app-button [text]="'Search'" ></app-button>
+</form>
