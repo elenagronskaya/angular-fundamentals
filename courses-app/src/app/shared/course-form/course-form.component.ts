@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {formArrayMinLengthValidator} from "../directives/formArrayMinLength.directive";
+import * as moment from "moment";
+import { ActivatedRoute } from '@angular/router';
+import {CourseService} from "../../services/course.service";
 
 @Component({
   selector: 'app-course-form',
@@ -16,11 +19,12 @@ export class CourseFormComponent implements OnInit {
   authorFormModel = {
     authorName: ''
   }
-
+  courseId: string | null;
   formGroupCourse: FormGroup;
   formGroupAuthor: FormGroup;
 
-  constructor() {
+  constructor(private route: ActivatedRoute, private courseService: CourseService) {
+    this.courseId = this.route.snapshot.paramMap.get('id');
     this.formGroupCourse = new FormGroup({
       title: new FormControl(this.courseFormModel.title, [
         Validators.required,
@@ -47,9 +51,29 @@ export class CourseFormComponent implements OnInit {
   }
 
   onFormSubmit() {
-    if (this.formGroupCourse.status === "VALID")
-    {
+    if (this.formGroupCourse.status === "VALID") {
       alert(JSON.stringify(this.formGroupCourse.value, null, 2));
+      if (this.courseId) {
+        this.courseService
+          .editCourse({
+            title: this.formGroupCourse.value.title,
+            description: this.formGroupCourse.value.description,
+            creationDate: moment().format('DD.MM.YYYY'),
+            duration: this.formGroupCourse.value.duration,
+            authors: this.formGroupCourse.value.authors,
+            id: this.courseId,
+          })
+          .subscribe();
+      } else {
+        this.courseService
+          .createCourse({
+            title: this.formGroupCourse.value.title,
+            description: this.formGroupCourse.value.description,
+            duration: this.formGroupCourse.value.duration,
+            authors: this.formGroupCourse.value.authors,
+          })
+          .subscribe();
+      }
       //redirect
     }
   }
@@ -61,15 +85,11 @@ export class CourseFormComponent implements OnInit {
   get duration() { return this.formGroupCourse.get('duration')?.value}
 
   onAuthorFormSubmit() {
-
-    if (this.formGroupAuthor.status === "VALID")
-    {
+    if (this.formGroupAuthor.status === "VALID") {
       const authorName  = this.formGroupAuthor.value['authorName'];
 
       (<FormArray>this.formGroupCourse.get('authors')).push(new FormControl(authorName));
-     // need to ask why it is not purge authorName control;
-      (<FormControl>(this.formGroupAuthor.value['authorName'])).setValue(null)
-
+      this.formGroupAuthor.reset();
     }
   }
   get authorName() { return this.formGroupAuthor.get('authorName'); }

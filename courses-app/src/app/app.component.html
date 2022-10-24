@@ -1,6 +1,5 @@
 <app-header>
-  <p class="name">name</p>
-  <app-button [text]="'logout'"></app-button>
+  <p class="name">{{userName | async}}</p>
+  <app-button [text]="'logout'" (click)="logout()"></app-button>
 </app-header>
-<app-courses [isEditable]="isEditable"></app-courses>
-
+<router-outlet></router-outlet>

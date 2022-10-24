@@ -1,8 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {IMockedCoursesList, mockedCoursesList} from "../../../mocked-data";
 
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import {Observable, tap} from "rxjs";
+import {ICourseData} from "../../interfaces/auth.interfaces";
+import {CourseService} from "../../services/course.service";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -13,19 +16,32 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 export class CoursesComponent implements OnInit {
   faPen = faPen;
   faTrash = faTrash;
-  constructor() { }
-  searchCourse(filter:string): IMockedCoursesList[]{
-    return mockedCoursesList.filter(course=> !filter
-      || course.title.toLowerCase().includes(filter.toLowerCase()));
+  constructor(private courseService: CourseService,  private router: Router) {}
+
+  searchCourse(filter:string): Observable<ICourseData[]>{
+
+    if (filter) {
+     return this.courseService.filter(filter)
+       .pipe(tap((courseResponse: ICourseData[]) => {
+         this.courses = courseResponse
+       }));
+   }
+     return this.courseService.getAll()
+       .pipe(tap((courseResponse: ICourseData[]) => {
+         this.courses = courseResponse
+       }));
   }
 
   ngOnInit(): void {
-    this.courses = this.searchCourse('');
+    this.searchCourse('').subscribe();
   }
-  courses: IMockedCoursesList[] = [];
+  courses: ICourseData[] = [];
   @Input() isEditable: boolean = false;
 
   onSearch(searchFilter: string) {
-    this.courses = this.searchCourse(searchFilter);
+    this.searchCourse(searchFilter).subscribe()
+  }
+  onCreateCourse(event: any ) {
+    this.router.navigate(['/courses/add'])
   }
 }

@@ -4,7 +4,7 @@
             [text]="'Please use the \'\'Add new course\'\' button to add your first course'">
     <app-button [text]="'Add new course'" ></app-button>
   </app-info>
-  <app-button *ngIf="courses && courses.length > 0" [text]="'Add new course'" >
+  <app-button *ngIf="courses && courses.length > 0" [text]="'Add new course'" (click)="onCreateCourse($event)" >
   </app-button>
   <div *ngFor="let course of courses">
     <app-course

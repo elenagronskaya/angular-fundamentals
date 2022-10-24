@@ -9,6 +9,9 @@ import {LoginModule} from "./shared/login/login.module";
 import {RegistrationModule} from "./shared/registration/registration.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CourseFormModule} from "./shared/course-form/course-form.module";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import { TokenInterceptor } from './auth/interceptors/token.interceptor';
+import {AuthModule} from "./auth/auth.module";
 
 @NgModule({
   declarations: [
@@ -16,6 +19,7 @@ import {CourseFormModule} from "./shared/course-form/course-form.module";
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     SharedModule,
     CoursesModule,
@@ -23,9 +27,16 @@ import {CourseFormModule} from "./shared/course-form/course-form.module";
     RegistrationModule,
     FormsModule,
     ReactiveFormsModule,
-    CourseFormModule
+    CourseFormModule,
+    AuthModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
+  ],
   exports: [
   ],
   bootstrap: [AppComponent]

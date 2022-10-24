@@ -46,20 +46,19 @@
         </ng-container>
       </div>
     </div>
-    <div>
-      <p class="title">Duration</p>
-      <div class="input-wrapper">
-        <label class="label">Duration</label>
-        <input type="number" class="input-grid" formControlName="duration" required (input)="inputHandler($event)">
-        <div *ngIf="duration?.invalid && duration?.touched"
-             class="alert alert-danger">
-          <div *ngIf="duration?.errors?.['required']" class="invalid-feedback">
-            Duration is required.
-          </div>
+  </form>
+  <div>
+    <p class="title">Duration</p>
+    <div class="input-wrapper">
+      <label class="label">Duration</label>
+      <input type="number" class="input-grid" formControlName="duration" required (input)="inputHandler($event)">
+      <div *ngIf="duration?.invalid && duration?.touched"
+           class="alert alert-danger">
+        <div *ngIf="duration?.errors?.['required']" class="invalid-feedback">
+          Duration is required.
         </div>
       </div>
-      <span class="text">Duration {{duration ?? 0 | durationToTime}}</span>
     </div>
-    <div></div>
-  </form>
+    <span class="text">Duration {{duration ?? 0 | durationToTime}}</span>
+  </div>
 </form>
