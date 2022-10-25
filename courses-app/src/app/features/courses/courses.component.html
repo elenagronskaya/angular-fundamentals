@@ -1,12 +1,19 @@
 <app-search (onSearch)="onSearch($event)" placeholder="Search courses..."></app-search>
 <div>
-  <app-info *ngIf="!courses || courses.length === 0" [title]="'Your list is empty'"
-            [text]="'Please use the \'\'Add new course\'\' button to add your first course'">
-    <app-button [text]="'Add new course'" ></app-button>
-  </app-info>
-  <app-button *ngIf="courses && courses.length > 0" [text]="'Add new course'" >
+  <ng-container *ngIf="courses | async as similarCourses">
+    <app-info *ngIf="!(similarCourses) || !similarCourses.length" [title]="'Your list is empty'"
+              [text]="'Please use the \'\'Add new course\'\' button to add your first course'">
+      <app-button [text]="'Add new course'" (click)="onCreateCourse($event)" ></app-button>
+    </app-info>
+  </ng-container>
+
+  <ng-container *ngIf="(courses | async) as similarCourses">
+
+  <app-button *ngIf="similarCourses?.length" [text]="'Add new course'" (click)="onCreateCourse($event)" >
   </app-button>
-  <div *ngFor="let course of courses">
+
+  </ng-container>
+  <div *ngFor="let course of courses$ | async">
     <app-course
       [title]="course.title"
       [description]="course.description"
@@ -14,9 +21,9 @@
       [duration]="course.duration"
       [authors]="course.authors"
     >
-      <app-button [text]="'Show course'" ></app-button>
-      <app-button *ngIf="isEditable" [fontawesome]=faPen></app-button>
-      <app-button *ngIf="isEditable" [fontawesome]=faTrash></app-button>
+      <app-button [text]="'Show course'" (click)="showCourse(course.id)" ></app-button>
+      <app-button *ngIf="isEditable | async" [fontawesome]=faPen (click)="onEditCourse(course.id)"></app-button>
+      <app-button *ngIf="isEditable | async" [fontawesome]=faTrash (click)="onDeleteCourse(course.id)"></app-button>
     </app-course>
   </div>
 </div>

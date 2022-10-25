@@ -1,8 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {IMockedCoursesList, mockedCoursesList} from "../../../mocked-data";
+import { Component, OnInit } from '@angular/core';
 
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import {Observable} from "rxjs";
+import {ICourseData} from "../../interfaces/auth.interfaces";
+import {Router} from "@angular/router";
+import {CourseStoreService} from "../../services/course-store.service";
+import {AuthorStoreService} from "../../services/author-store.service";
+import {UserStoreService} from "../../user/user-store.service";
 
 
 @Component({
@@ -13,19 +18,51 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 export class CoursesComponent implements OnInit {
   faPen = faPen;
   faTrash = faTrash;
-  constructor() { }
-  searchCourse(filter:string): IMockedCoursesList[]{
-    return mockedCoursesList.filter(course=> !filter
-      || course.title.toLowerCase().includes(filter.toLowerCase()));
+  courses$ = this.courseStoreService.courses$;
+
+  constructor(private courseStoreService: CourseStoreService,
+              private authorStoreService: AuthorStoreService,
+              private userStoreService: UserStoreService,
+              private router: Router) {}
+
+  searchCourse(filter:string):void{
+    if (filter) {
+     this.courseStoreService.filter(filter).subscribe();
+   }else {
+      this.courseStoreService.getAll().subscribe();
+    }
   }
 
   ngOnInit(): void {
-    this.courses = this.searchCourse('');
+    this.authorStoreService.getAllAuthors().subscribe(()=>{
+      this.searchCourse('');
+    });
   }
-  courses: IMockedCoursesList[] = [];
-  @Input() isEditable: boolean = false;
+
+  get isEditable(): Observable<boolean> {
+    return this.userStoreService.isAdmin$;
+  }
 
   onSearch(searchFilter: string) {
-    this.courses = this.searchCourse(searchFilter);
+    this.searchCourse(searchFilter);
+  }
+  get courses(): Observable<ICourseData[]> {
+    return this.courseStoreService.courses$;
+  }
+
+  onCreateCourse(event: any ) {
+    this.router.navigate(['/courses/add'])
+  }
+
+  showCourse(id: any): void {
+    this.router.navigate([`/courses/${id}`]);
+  }
+
+  onEditCourse(id: any) {
+    this.router.navigate([`/courses/edit/${id}`]);
+  }
+
+  onDeleteCourse(id: any) {
+    this.courseStoreService.deleteCourseById(id);
   }
 }

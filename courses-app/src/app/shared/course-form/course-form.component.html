@@ -11,7 +11,7 @@
       </div>
       </label>
     </div>
-    <app-button [text]="'Create course'"></app-button>
+    <app-button [text]="courseId ? 'Edit course': 'Create course'"></app-button>
   </div>
   <label class="label">Description
     <textarea type="text" formControlName="description" required class="textarea" placeholder="Enter description..."></textarea>
@@ -40,26 +40,35 @@
     <div>
       <p class="title">Author list</p>
       <div class="author-list">
-        <ng-container *ngFor="let author of authors;index as i">
-          <p class="author">{{author.value}}</p>
-          <app-button [text]="'Delete author'" (click)="deleteAuthor(i)"></app-button>
+        <ng-container *ngFor="let author of allAuthorList$ | async;index as i">
+          <p class="author">{{author.name}}</p>
+          <app-button [text]="'+'" (click)="assignAuthor(author.id, i)"></app-button>
         </ng-container>
       </div>
     </div>
     <div>
-      <p class="title">Duration</p>
-      <div class="input-wrapper">
-        <label class="label">Duration</label>
-        <input type="number" class="input-grid" formControlName="duration" required (input)="inputHandler($event)">
-        <div *ngIf="duration?.invalid && duration?.touched"
-             class="alert alert-danger">
-          <div *ngIf="duration?.errors?.['required']" class="invalid-feedback">
-            Duration is required.
-          </div>
+      <p class="title">Course Authors</p>
+      <div class="author-list">
+        <ng-container *ngFor="let authorControl of courseAuthors;index as i">
+          <p class="author">{{getAuthorName(authorControl.value) | async}}</p>
+          <app-button [text]="'+'" (click)="reAssignAuthor(authorControl.value, i)"></app-button>
+        </ng-container>
+      </div>
+    </div>
+
+  </form>
+  <div>
+    <p class="title">Duration</p>
+    <div class="input-wrapper">
+      <label class="label">Duration</label>
+      <input type="number" class="input-grid" formControlName="duration" required (input)="inputHandler($event)">
+      <div *ngIf="duration?.invalid && duration?.touched"
+           class="alert alert-danger">
+        <div *ngIf="duration?.errors?.['required']" class="invalid-feedback">
+          Duration is required.
         </div>
       </div>
-      <span class="text">Duration {{duration ?? 0 | durationToTime}}</span>
     </div>
-    <div></div>
-  </form>
+    <span class="text">Duration {{duration ?? 0 | durationToTime}}</span>
+  </div>
 </form>

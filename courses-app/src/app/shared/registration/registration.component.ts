@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators} from "@angular/forms";
 import {emailValidator} from "../directives/email.directive";
 import {passwordValidator} from "../directives/password.directive";
+import {AuthService} from "../../auth/services/auth.service";
+import {Router} from "@angular/router";
+import {throwError} from "rxjs";
 
 @Component({
   selector: 'app-registration',
@@ -9,8 +12,6 @@ import {passwordValidator} from "../directives/password.directive";
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
-
-
   registrationModel = {
     name: '',
     email :'',
@@ -19,7 +20,7 @@ export class RegistrationComponent implements OnInit {
 
   registrationForm:  FormGroup;
 
-  constructor() {
+  constructor(private authService: AuthService, private router: Router ) {
 
     this.registrationForm = new FormGroup({
       name: new FormControl(this.registrationModel.name, [
@@ -41,9 +42,12 @@ export class RegistrationComponent implements OnInit {
   }
 
   onFormSubmit() {
-    if (this.registrationForm.status === "VALID")
-    {
-      alert(JSON.stringify(this.registrationForm.value, null, 2));
+    if (this.registrationForm.status === "VALID") {
+      this.authService.register(this.registrationForm.value).subscribe(data => {
+        this.registrationForm.reset();
+        this.router.navigate(['/login']);
+      },
+        (error) => throwError(error))
       //redirect
     }
   }
