@@ -14,7 +14,6 @@ export class CourseService {
   getAll (): Observable<ICourseData[]> {
     return this.http.get<ICoursesResponse>(`${environment.baseUrl}/courses/all`)
       .pipe(map((coursesResponse) => {
-        debugger;
       return coursesResponse.result;
     }))
   }

@@ -35,7 +35,6 @@ export class CourseFormComponent implements OnInit {
 
   buildFormGroupCourse()
   {
-    debugger;
     return  new FormGroup({
       title: new FormControl(this.courseFormModel.title, [
         Validators.required,
@@ -78,7 +77,6 @@ export class CourseFormComponent implements OnInit {
     if (this.courseId) {
       this.courseStoreService.getCourseById(this.courseId).subscribe((courseData)=> {
         if (courseData) {
-          debugger;
           // @ts-ignore
           this.courseFormModel = {...courseData};
           this.formGroupCourse = this.buildFormGroupCourse();
@@ -157,7 +155,6 @@ export class CourseFormComponent implements OnInit {
   }
 
   reAssignAuthor(authorId: any, index: number) {
-    debugger;
     this.authorStoreService.authors$.pipe(map(authors=> authors.find(a=>a.id == authorId))).subscribe((author)=>{
       if (author)
       {

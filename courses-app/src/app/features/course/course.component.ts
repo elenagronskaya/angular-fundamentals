@@ -27,7 +27,6 @@ import {Router} from "@angular/router";
        this.authorList$ = this.authorStoreService.getAuthorByIds(changes['authors'].currentValue)
          .pipe(map(
            (authors)=>{
-             debugger;
              return authors.map(a=>a.name)}
            )
          )

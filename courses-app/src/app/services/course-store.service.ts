@@ -23,7 +23,6 @@ export class CourseStoreService {
   getAll ():Observable<ICourseData[]>{
     this.isLoading$$.next(true)
     return this.courseService.getAll().pipe(tap((courses) => {
-      debugger;
                                                 this.courses$$.next(courses);
                                                 this.isLoading$$.next(false)
       },
