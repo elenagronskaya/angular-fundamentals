@@ -3,6 +3,7 @@ import {NgForm} from "@angular/forms";
 import {AuthService} from "../../auth/services/auth.service";
 import {Router} from "@angular/router";
 import {UserStoreService} from "../../user/user-store.service";
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -19,12 +20,14 @@ export class LoginComponent implements OnInit {
 
   onLoginSubmit(loginForm: NgForm): any{
     if (loginForm.status === "VALID") {
-      alert(JSON.stringify(loginForm.value, null, 2));
-    this.authService.login(loginForm.value).subscribe(() => {
-      this.authService.setAuth();
-      this.userStoreService.setUserData();
-      this.router.navigate(['/'])
-    }, error => {});
+      this.authService.login(loginForm.form.value).subscribe(
+        () => {
+          this.authService.setAuth();
+          this.userStoreService.setUserData();
+          this.router.navigate(['/courses']);
+        },
+        (error) => throwError(error)
+      );
     }
   }
 }

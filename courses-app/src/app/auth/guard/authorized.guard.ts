@@ -13,7 +13,6 @@ export class AuthorizedGuard implements CanLoad {
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.authService.isAuthorized$.pipe(
       map((value) => {
-        debugger;
         return value || this.router.parseUrl('/login')})
     );
   }

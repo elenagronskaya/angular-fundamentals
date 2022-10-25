@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, map, Observable} from 'rxjs';
 import {UserService} from './user.service';
-import {tap} from 'rxjs/operators';
+import {IUser} from "../interfaces/auth.interfaces";
 
 @Injectable({
   providedIn: 'root'
@@ -21,13 +21,11 @@ export class UserStoreService {
     this.name$$.next('');
     this.isAdmin$$.next(false);
   }
-  setUserData(): void {
-    this.userService.getUser().pipe(
-      tap(response => {
-          this.name$$.next(response.result.name);
-          this.isAdmin$$.next(response.result.role === 'Admin');
-        }
-      )
-    ).subscribe();
+  setUserData(){
+    this.userService.getUser().pipe(map((r)=>r.result)).subscribe(
+      (user: IUser )=> {
+        this.name$$.next(user.name);
+        this.isAdmin$$.next(user.role === 'Admin');
+      });
   }
 }

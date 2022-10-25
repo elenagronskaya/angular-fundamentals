@@ -1,11 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import {Observable, tap} from "rxjs";
+import {Observable} from "rxjs";
 import {ICourseData} from "../../interfaces/auth.interfaces";
-import {CourseService} from "../../services/course.service";
 import {Router} from "@angular/router";
+import {CourseStoreService} from "../../services/course-store.service";
+import {AuthorStoreService} from "../../services/author-store.service";
+import {UserStoreService} from "../../user/user-store.service";
 
 
 @Component({
@@ -16,32 +18,51 @@ import {Router} from "@angular/router";
 export class CoursesComponent implements OnInit {
   faPen = faPen;
   faTrash = faTrash;
-  constructor(private courseService: CourseService,  private router: Router) {}
+  courses$ = this.courseStoreService.courses$;
 
-  searchCourse(filter:string): Observable<ICourseData[]>{
+  constructor(private courseStoreService: CourseStoreService,
+              private authorStoreService: AuthorStoreService,
+              private userStoreService: UserStoreService,
+              private router: Router) {}
 
+  searchCourse(filter:string):void{
     if (filter) {
-     return this.courseService.filter(filter)
-       .pipe(tap((courseResponse: ICourseData[]) => {
-         this.courses = courseResponse
-       }));
-   }
-     return this.courseService.getAll()
-       .pipe(tap((courseResponse: ICourseData[]) => {
-         this.courses = courseResponse
-       }));
+     this.courseStoreService.filter(filter).subscribe();
+   }else {
+      this.courseStoreService.getAll().subscribe();
+    }
   }
 
   ngOnInit(): void {
-    this.searchCourse('').subscribe();
+    this.authorStoreService.getAllAuthors().subscribe(()=>{
+      this.searchCourse('');
+    });
   }
-  courses: ICourseData[] = [];
-  @Input() isEditable: boolean = false;
+
+  get isEditable(): Observable<boolean> {
+    return this.userStoreService.isAdmin$;
+  }
 
   onSearch(searchFilter: string) {
-    this.searchCourse(searchFilter).subscribe()
+    this.searchCourse(searchFilter);
   }
+  get courses(): Observable<ICourseData[]> {
+    return this.courseStoreService.courses$;
+  }
+
   onCreateCourse(event: any ) {
     this.router.navigate(['/courses/add'])
+  }
+
+  showCourse(id: any): void {
+    this.router.navigate([`/courses/${id}`]);
+  }
+
+  onEditCourse(id: any) {
+    this.router.navigate([`/courses/edit/${id}`]);
+  }
+
+  onDeleteCourse(id: any) {
+    this.courseStoreService.deleteCourseById(id);
   }
 }

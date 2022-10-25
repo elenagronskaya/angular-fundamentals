@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from '@angular/common/http';
 import {map, Observable} from "rxjs";
 import {environment} from "../../environments/environment";
-import {ICourseData, ICoursesResponse} from "../interfaces/auth.interfaces";
+import {ICourseData, ICourseResponse, ICoursesResponse, IDeleteCourseResponse} from "../interfaces/auth.interfaces";
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,16 @@ export class CourseService {
   getAll (): Observable<ICourseData[]> {
     return this.http.get<ICoursesResponse>(`${environment.baseUrl}/courses/all`)
       .pipe(map((coursesResponse) => {
+        debugger;
       return coursesResponse.result;
     }))
+  }
+
+  getById (id: string): Observable<ICourseData> {
+    return this.http.get<ICourseResponse>(`${environment.baseUrl}/courses/${id}`)
+      .pipe(map((coursesResponse) => {
+        return coursesResponse.result;
+      }))
   }
 
   filter(filter: string): Observable<ICourseData[]> {
@@ -31,6 +39,10 @@ export class CourseService {
 
   editCourse(course: ICourseData): Observable<ICourseData> {
     return this.http.put<ICourseData>(`${environment.baseUrl}/courses/${course.id}`, { ...course });
+  }
+
+  deleteCourse(id: string) : Observable<any> {
+    return this.http.delete<IDeleteCourseResponse>(`${environment.baseUrl}/courses/${id}`);
   }
 }
 

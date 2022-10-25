@@ -21,6 +21,7 @@ export interface IUser{
   password: string;
   role: string;
 }
+
 export interface IUserResponse {
   successful: boolean;
   result: IUser;
@@ -29,6 +30,11 @@ export interface IUserResponse {
 export interface ICoursesResponse {
   successful?: boolean;
   result: ICourseData[];
+}
+
+export interface ICourseResponse {
+  successful?: boolean;
+  result: ICourseData;
 }
 
 export interface ICourseData {
@@ -40,3 +46,25 @@ export interface ICourseData {
   title: string;
   isEdited?: boolean;
 }
+
+export interface IAuthorsResponse {
+  result: IAuthor[];
+  successful: boolean;
+}
+
+export interface IAuthorResponse {
+  result: IAuthor;
+  successful: boolean;
+}
+
+export interface IAuthor {
+  name: string;
+  id: string;
+}
+
+export interface IDeleteCourseResponse {
+  result: any;
+  successful: boolean;
+}
+
+

@@ -1,58 +1,33 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {LoginComponent} from "./shared/login/login.component";
-import {RegistrationComponent} from "./shared/registration/registration.component";
-import {CoursesComponent} from "./features/courses/courses.component";
-import {CourseComponent} from "./features/course/course.component";
-import {CourseFormComponent} from "./shared/course-form/course-form.component";
-import {AuthorizedGuard} from "./auth/guard/authorized.guard";
-import {AdminGuard} from "./auth/guard/admin.guard";
-import {NotAuthorizedGuard} from "./auth/guard/not-authorized.guard";
-import {authorizedCanActivateGuard} from "./auth/guard/authorizedCanActivate.guard";
+import { AuthorizedGuard } from './auth/guard/authorized.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'courses',
-    pathMatch: 'full',
-    canLoad: [AuthorizedGuard],
-  },
-  {
     path: 'login',
-    component: LoginComponent,
-    canActivate: [NotAuthorizedGuard],
+    loadChildren: () =>
+      import('./shared/login/login.module').then((m) => m.LoginModule),
   },
   {
     path: 'registration',
-    component: RegistrationComponent,
-    canActivate: [NotAuthorizedGuard],
+    loadChildren: () =>
+      import('./shared/registration/registration.module').then((m) => m.RegistrationModule),
   },
   {
     path: 'courses',
-    component: CoursesComponent,
-    canActivate: [authorizedCanActivateGuard],
-  },
-  {
-    path: 'courses/add',
-    component: CourseFormComponent,
+    loadChildren: () =>
+      import('./features/courses/courses.module').then((m) => m.CoursesModule),
     canLoad: [AuthorizedGuard],
-    canActivate: [AdminGuard],
   },
   {
-    path: 'courses/:id',
-    component: CourseComponent,
-    canLoad: [AuthorizedGuard]
-  },
-  {
-    path: 'courses/edit/:id',
-    component: CourseFormComponent,
-    canLoad: [AuthorizedGuard],
-    canActivate: [AdminGuard],
+    path: '',
+    redirectTo: '/courses',
+    pathMatch: 'full',
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

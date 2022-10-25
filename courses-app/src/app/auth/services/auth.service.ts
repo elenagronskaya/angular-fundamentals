@@ -38,7 +38,8 @@ export class AuthService {
     return this.http
       .post<LoginResponse>(`${environment.baseUrl}/login`, data)
       .pipe(
-        tap((response) => this.sessionStorageService.setToken(response.result)),
+        tap((response) => {
+          this.sessionStorageService.setToken(response.result)}),
         catchError((error) => throwError(error))
       );
   }

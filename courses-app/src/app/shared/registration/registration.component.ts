@@ -43,7 +43,6 @@ export class RegistrationComponent implements OnInit {
 
   onFormSubmit() {
     if (this.registrationForm.status === "VALID") {
-      alert(JSON.stringify(this.registrationForm.value, null, 2));
       this.authService.register(this.registrationForm.value).subscribe(data => {
         this.registrationForm.reset();
         this.router.navigate(['/login']);
