@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {AuthService} from "../../auth/services/auth.service";
 import {Router} from "@angular/router";
-import {UserStoreService} from "../../user/user-store.service";
-import { throwError } from 'rxjs';
+import {AuthStateFacade} from "../../auth/store/auth.facade";
+import {UserStateFacade} from "../../user/store/user.fasad";
 
 @Component({
   selector: 'app-login',
@@ -13,21 +12,37 @@ import { throwError } from 'rxjs';
 export class LoginComponent implements OnInit {
   email: string = "";
   password: string = "";
-  constructor(private authService: AuthService, private userStoreService: UserStoreService, private router: Router) { }
+
+  constructor(private authStateFacade: AuthStateFacade,
+              private userStateFacade: UserStateFacade,
+              private router: Router) { }
 
   ngOnInit(): void {
+    this.authStateFacade.getLoginSuccess$.subscribe(()=> {
+      debugger;
+      this.userStateFacade.getCurrentUser();
+
+    });
+
+
+    this.userStateFacade.name$.subscribe((name: string | null)=>{
+         debugger;
+         if (name)
+         {
+           this.router.navigate(['/courses']);
+         }
+
+    })
+    this.authStateFacade.getLoginErrorMessage$.subscribe(()=>{
+
+    });
+
   }
 
   onLoginSubmit(loginForm: NgForm): any{
     if (loginForm.status === "VALID") {
-      this.authService.login(loginForm.form.value).subscribe(
-        () => {
-          this.authService.setAuth();
-          this.userStoreService.setUserData();
-          this.router.navigate(['/courses']);
-        },
-        (error) => throwError(error)
-      );
+      this.authStateFacade.login(loginForm.form.value);
     }
+
   }
 }

@@ -12,6 +12,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUser(): Observable<IUserResponse> {
+    debugger;
     return this.http.get<IUserResponse>(`${environment.baseUrl}/users/me`);
   }
 }

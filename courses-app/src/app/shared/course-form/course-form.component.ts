@@ -7,6 +7,7 @@ import {BehaviorSubject, map, Observable} from "rxjs";
 import {IAuthor} from "../../interfaces/auth.interfaces";
 import {AuthorStoreService} from "../../services/author-store.service";
 import {CourseStoreService} from "../../services/course-store.service";
+import {AuthorsStateFacade} from "../../store/authors/authors.facade";
 
 @Component({
   selector: 'app-course-form',
@@ -27,9 +28,10 @@ export class CourseFormComponent implements OnInit {
   formGroupCourse: FormGroup;
   formGroupAuthor: FormGroup;
 
-  allAuthorList$$: BehaviorSubject<IAuthor[]> = new BehaviorSubject<IAuthor[]>([])
 
-  allAuthorList$: Observable<IAuthor[]> = this.allAuthorList$$.asObservable();
+  get allAuthorList$() {
+    return this.authorsStateFacade.authors$;
+  }
 
   courseAuthorList$$: BehaviorSubject<IAuthor[]> = new BehaviorSubject<IAuthor[]>([]);
 
@@ -52,6 +54,7 @@ export class CourseFormComponent implements OnInit {
   }
 
   constructor(
+    private authorsStateFacade: AuthorsStateFacade,
     private activatedRoute: ActivatedRoute,
     private router : Router,
     private courseService: CourseService,
@@ -69,9 +72,13 @@ export class CourseFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authorStoreService.getAllAuthors().subscribe((authors)=>{
-      this.allAuthorList$$.next(authors);
-    });
+    this.authorsStateFacade.addedAuthor$.subscribe(()=>
+    {
+      this.formGroupAuthor.reset();
+    })
+
+    this.authorsStateFacade.getAuthors();
+
 
     this.courseId = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.courseId) {
@@ -123,21 +130,23 @@ export class CourseFormComponent implements OnInit {
   get duration() { return this.formGroupCourse.get('duration')?.value}
 
 
+
+
   onAuthorFormSubmit() {
     if (this.formGroupAuthor.status === "VALID") {
       const authorName  = this.formGroupAuthor.value['authorName'];
-      this.authorStoreService.createAuthor(authorName).subscribe((author)=>{
-        this.allAuthorList$$.value.push(author);
-        this.allAuthorList$$.next(this.allAuthorList$$.value);
-        this.formGroupAuthor.reset();
-        })
+
+
+      this.authorsStateFacade.addAuthor(authorName);
+
+
      }
   }
   get authorName() { return this.formGroupAuthor.get('authorName'); }
 
   getAuthorName(authorId: any): Observable<string>
   {
-    return this.authorStoreService.authors$
+    return this.authorsStateFacade.authors$
     .pipe(map(authors=>
     {
       const author = authors.find(author=>author.id == authorId);
@@ -148,24 +157,24 @@ export class CourseFormComponent implements OnInit {
   get courseAuthors() { return (<FormArray>this.formGroupCourse.get('authors')).controls }
 
   assignAuthor(authorId: any, index: number) {
-    (<FormArray>this.formGroupCourse.get('authors')).push(new FormControl(authorId))
-    const prevAllAuthors = this.allAuthorList$$.value;
-    this.allAuthorList$$.next(prevAllAuthors.filter(a=> a.id != authorId));
+    // (<FormArray>this.formGroupCourse.get('authors')).push(new FormControl(authorId))
+    // const prevAllAuthors = this.allAuthorList$$.value;
+    // this.allAuthorList$$.next(prevAllAuthors.filter(a=> a.id != authorId));
     return false;
   }
 
   reAssignAuthor(authorId: any, index: number) {
-    this.authorStoreService.authors$.pipe(map(authors=> authors.find(a=>a.id == authorId))).subscribe((author)=>{
-      if (author)
-      {
-        const prevAllAuthors = this.allAuthorList$$.value;
-        prevAllAuthors.push(author);
-        this.allAuthorList$$.next(prevAllAuthors);
-      }
-    });
-
-    const indexx = (<FormArray>this.formGroupCourse.get('authors')).controls.findIndex((id:any)=>id.value != authorId);
-    (<FormArray>this.formGroupCourse.get('authors')).removeAt(indexx)
+    // this.authorStoreService.authors$.pipe(map(authors=> authors.find(a=>a.id == authorId))).subscribe((author)=>{
+    //   if (author)
+    //   {
+    //     const prevAllAuthors = this.allAuthorList$$.value;
+    //     prevAllAuthors.push(author);
+    //     this.allAuthorList$$.next(prevAllAuthors);
+    //   }
+    // });
+    //
+    // const indexx = (<FormArray>this.formGroupCourse.get('authors')).controls.findIndex((id:any)=>id.value != authorId);
+    // (<FormArray>this.formGroupCourse.get('authors')).removeAt(indexx)
     return false;
   }
 

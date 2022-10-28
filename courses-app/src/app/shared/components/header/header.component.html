@@ -1,11 +1,11 @@
-<header class="header">
+<header *ngIf="(isAuthorized$ | async)" class="header">
   <div [routerLink]="['/courses']">
     <img src="../../assets/logo.png" alt="logo">
   </div>
   <div>
     <div class="name-wrapper">
-      <p class="name">{{userName | async}}</p>
-      <app-button *ngIf="(isLogin$ | async) " (click)="loginlogOut()" [text]="'logout'"></app-button>
+      <p class="name">{{ userName$ | async }}</p>
+      <app-button *ngIf="(isAuthorized$ | async)" (click)="logout()" [text]="'logout'"></app-button>
     </div>
   </div>
 </header>
