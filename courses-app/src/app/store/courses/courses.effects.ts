@@ -9,9 +9,16 @@ import {coursesActions} from "./courses.actions";
 import {AuthorsStateFacade} from "../authors/authors.facade";
 import {AuthorDTO, CourseDataDTO} from "../../interfaces/auth.interfaces";
 import {Router} from "@angular/router";
+import {CoursesStateFacade} from "./courses.facade";
 
 @Injectable()
 export class CoursesEffects {
+
+  constructor(private actions$: Actions,
+              private courseService: CourseService, private authorsStateFacade : AuthorsStateFacade,
+              private  coursesStateFacade : CoursesStateFacade,
+              private router: Router) {
+  }
 
   getAll$ = createEffect(() => {
       return this.actions$.pipe(
@@ -39,30 +46,23 @@ export class CoursesEffects {
               ));
           }
         )
-      );
+      )
     }
   )
-
 
   filteredCourses$ = createEffect(() => {
       return this.actions$.pipe(
         ofType(coursesActions.requestFilteredCourses),
         mergeMap(({searchValue}) => {
-            return this.courseService.filter(searchValue)
+            return this.coursesStateFacade.allCourses$
               .pipe(map(
-                (response) => response.map(c=> new CourseDataDTO(
-                  //??????????????????????  HOW TO DO MAPPING???????
-                  //c.authors.map( (authorId : string) => this.authorsStateFacade.getAuthorMapping(authorId)),
-                  c.authors.map( (authorId : string) => new AuthorDTO(authorId, authorId /* temporary */)),
-                  c.creationDate,
-                  c.description,
-                  c.duration,
-                  c.id,
-                  c.isEdited,
-                  c.title)
-                )))
-              .pipe(map( (data) => {
-                  return coursesActions.requestFilteredCoursesSuccess({courses: data});
+                (allcourses) => allcourses.filter(
+                  c=>c.title.toLowerCase().includes(searchValue.toLowerCase())
+                || c.description.toLowerCase().includes(searchValue.toLowerCase())
+                )
+              ))
+              .pipe(map( (filteredCourses) => {
+                  return coursesActions.requestFilteredCoursesSuccess({courses: filteredCourses});
                 }))
           }
         )
@@ -102,7 +102,7 @@ export class CoursesEffects {
         ofType(coursesActions.requestDeleteCourse),
         mergeMap(({id}) => this.courseService.deleteCourse(id)
           .pipe(
-            map(response => {
+            map(() => {
               return coursesActions.requestAllCourses();
             }),
             catchError(() => of(coursesActions.requestDeleteCourseFail({errorMessage: 'requestDeleteCourse failed'})))
@@ -117,7 +117,7 @@ export class CoursesEffects {
         ofType(coursesActions.requestEditCourse),
         mergeMap(({body, id}) => this.courseService.editCourse(body, id)
           .pipe(
-            map(response => {
+            map(() => {
               return coursesActions.requestEditCourseSuccess();
             }),
             catchError(() => of(coursesActions.requestEditCourseFail ({errorMessage: 'requestEditCourse failed'})))
@@ -132,7 +132,7 @@ export class CoursesEffects {
         ofType(coursesActions.requestCreateCourse),
         mergeMap(({body}) => this.courseService.createCourse(body)
           .pipe(
-            map(response => {
+            map(() => {
               return coursesActions.requestCreateCourseSuccess();
             }),
             catchError(() => of(coursesActions.requestCreateCourseFail ({errorMessage: 'requestCreateCourse failed'})))
@@ -143,14 +143,8 @@ export class CoursesEffects {
   )
 
   redirectToTheCoursesPage$ = createEffect(() => this.actions$.pipe(
-    ofType(coursesActions.requestCreateCourseSuccess, coursesActions.requestEditCourseSuccess , coursesActions.requestSingleCourseFail ),
+    ofType(coursesActions.requestCreateCourseSuccess, coursesActions.requestEditCourseSuccess , coursesActions.requestSingleCourseFail),
     tap(() => this.router.navigate(['/courses'])),
   ), {dispatch: false});
 
-
-
-
-  constructor(private actions$: Actions,
-              private courseService: CourseService, private authorsStateFacade : AuthorsStateFacade, private router: Router) {
-  }
 }
