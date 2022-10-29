@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthorizedGuard } from './auth/guard/authorized.guard';
+import { AuthorizedCanLoadGuard } from './auth/guard/authorized-can-load-guard.service';
 
 const routes: Routes = [
   {
@@ -17,7 +17,7 @@ const routes: Routes = [
     path: 'courses',
     loadChildren: () =>
       import('./features/courses/courses.module').then((m) => m.CoursesModule),
-    canLoad: [AuthorizedGuard],
+    canLoad: [AuthorizedCanLoadGuard],
   },
   {
     path: '',
