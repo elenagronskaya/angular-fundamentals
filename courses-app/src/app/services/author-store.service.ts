@@ -17,7 +17,7 @@ export class AuthorStoreService {
 
   getAuthorByIds(ids: string[]): Observable<IAuthor[]> {
     return this.authors$.pipe(map(authors => {
-        const filteredArray = authors.filter(x=> ids.includes(x.id));
+        const filteredArray = authors.filter(x=> ids.includes(x.id??''));
         return filteredArray;
       }));
   }

@@ -9,6 +9,11 @@ export const isAllCoursesLoadingSelector = createSelector(
   (state: CoursesState) => state.isAllCoursesLoading
 );
 
+export const isSingleCourseLoadingSelector = createSelector(
+  getCoursesState,
+  (state: CoursesState) => state.isSingleCourseLoading
+);
+
 export const isSearchingStateSelector = createSelector(
   getCoursesState,
   (state: CoursesState) => state.isSearchState
@@ -39,8 +44,10 @@ export const getErrorMessage = createSelector(
 export const coursesQuery = {
   isAllCoursesLoadingSelector,
   isSearchingStateSelector,
+  getAllCourses,
   getCourses,
   getCourse,
+  isSingleCourseLoadingSelector,
   getErrorMessage,
 }
 

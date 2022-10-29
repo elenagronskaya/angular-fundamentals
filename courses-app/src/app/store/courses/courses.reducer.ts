@@ -1,18 +1,13 @@
 import {createReducer, on} from "@ngrx/store";
-import {ICourseData} from "../../interfaces/auth.interfaces";
-import {fas} from "@fortawesome/free-solid-svg-icons";
+import {CourseDataDTO} from "../../interfaces/auth.interfaces";
 import {
-  coursesActions, requestAllCoursesFail,
-  requestAllCoursesSuccess, requestCreateCourseFail, requestDeleteCourseFail, requestEditCourseFail,
-  requestFilteredCoursesSuccess, requestSingleCourseFail,
-  requestSingleCourseSuccess
+  coursesActions
 } from "./courses.actions";
-import {getErrorMessage, isAllCoursesLoadingSelector} from "./courses.selectors";
 
 export interface CoursesState {
-  allCourses: ICourseData[],
-  courses: ICourseData[],
-  course: ICourseData | null,
+  allCourses: CourseDataDTO[],
+  courses: CourseDataDTO[],
+  course: CourseDataDTO | null,
   isAllCoursesLoading: boolean,
   isSingleCourseLoading: boolean,
   isSearchState: boolean,
@@ -34,17 +29,19 @@ export const initialState: CoursesState = {
 
 export const coursesReducer = createReducer(
   initialState,
+
+  on(coursesActions.requestAllCourses, (state) => {
+    return ({
+      ...state,
+      isAllCoursesLoading: true,
+    })}
+  ),
+
   on(coursesActions.requestAllCoursesSuccess, (state, {courses}) => {
     return ({
       ...state,
       allCourses: courses,
-    })}
-  ),
-
-  on(coursesActions.requestSingleCourseSuccess, (state, {course}) => {
-    return ({
-      ...state,
-      course: course,
+      isAllCoursesLoading: false
     })}
   ),
 
@@ -55,19 +52,33 @@ export const coursesReducer = createReducer(
     })}
   ),
 
-
   on(coursesActions.requestAllCoursesFail, (state, {errorMessage}) => {
     return ({
       ...state,
       errorMessage: errorMessage,
+      isAllCoursesLoading: false,
     })}
   ),
 
+  on(coursesActions.requestSingleCourse, (state) => {
+    return ({
+      ...state,
+      isSingleCourseLoading: true
+    })}
+  ),
+  on(coursesActions.requestSingleCourseSuccess, (state, {course}) => {
+    return ({
+      ...state,
+      course: course,
+      isSingleCourseLoading: false
+    })}
+  ),
 
   on(coursesActions.requestSingleCourseFail, (state, {errorMessage}) => {
     return ({
       ...state,
       errorMessage: errorMessage,
+      isSingleCourseLoading: false
     })}
   ),
 
@@ -92,5 +103,4 @@ export const coursesReducer = createReducer(
       errorMessage: errorMessage,
     })}
   ),
-
 );

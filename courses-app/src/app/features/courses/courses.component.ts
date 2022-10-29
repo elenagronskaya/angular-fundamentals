@@ -8,6 +8,7 @@ import {Router} from "@angular/router";
 import {CourseStoreService} from "../../services/course-store.service";
 import {AuthorStoreService} from "../../services/author-store.service";
 import {UserStoreService} from "../../user/user-store.service";
+import {CoursesStateFacade} from "../../store/courses/courses.facade";
 
 
 @Component({
@@ -23,6 +24,7 @@ export class CoursesComponent implements OnInit {
   constructor(private courseStoreService: CourseStoreService,
               private authorStoreService: AuthorStoreService,
               private userStoreService: UserStoreService,
+              private coursesStateFacade : CoursesStateFacade,
               private router: Router) {}
 
   searchCourse(filter:string):void{

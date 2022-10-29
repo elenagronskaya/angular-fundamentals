@@ -21,7 +21,7 @@ export class AuthStateFacade  {
 
   getLogoutSuccess$ = this.updates$.pipe(ofType(authActions.requestLogoutSuccess));
 
-  constructor(private store: Store<AuthState>, private sessionStorage : SessionStorageService, private updates$: Actions,) {
+  constructor(private store: Store<AuthState>, private sessionStorage : SessionStorageService, private updates$: Actions) {
   }
 
   login = (payload: ILoginData) => this.store.dispatch(authActions.requestLogin(payload))

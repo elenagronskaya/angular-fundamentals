@@ -41,14 +41,14 @@ export class CourseStoreService {
   createCourse(course: ICourseData): void{
     this.isLoading$$.next(true)
     this.courseService.createCourse(course)
-      .subscribe((courses) => {
+        .subscribe((courses) => {
           this.isLoading$$.next(false);
       },(error)=>{ this.isLoading$$.next(false)});
   }
 
   editCourse(course: ICourseData): void{
     this.isLoading$$.next(true)
-    this.courseService.editCourse(course)
+    this.courseService.editCourse(course, course.id??'')
       .subscribe((courses) => {
         this.isLoading$$.next(false);
       },(error)=>{ this.isLoading$$.next(false)});

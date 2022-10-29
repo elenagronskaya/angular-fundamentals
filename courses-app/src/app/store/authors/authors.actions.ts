@@ -1,8 +1,8 @@
-  import {createAction, props} from "@ngrx/store";
+import {createAction, props} from "@ngrx/store";
 
-  import {IAuthor} from "../../interfaces/auth.interfaces";
+import {IAuthor} from "../../interfaces/auth.interfaces";
 
-  export const requestAuthors = createAction('requestAuthors');
+export const requestAuthors = createAction('requestAuthors');
 
 export const requestAuthorsSuccess = createAction('requestAuthorsSuccess', props<{authors: IAuthor[]}>()  );
 

@@ -7,7 +7,6 @@ export interface UserState {
 }
 export const userFeatureKey = 'currentUser';
 
-
 export const initialState: UserState = {
   isAdmin: false,
   name: null,
@@ -16,13 +15,11 @@ export const initialState: UserState = {
 export const userReducer  = createReducer(
   initialState,
   on(userActions.requestCurrentUserSuccess, (state, { name, role }) => {
-    debugger;
     return ({
     ...state,
       name,
       isAdmin: role === 'admin'
   });}
-
   ),
 
   on(userActions.requestCleanUserDataSuccess, (state) => {

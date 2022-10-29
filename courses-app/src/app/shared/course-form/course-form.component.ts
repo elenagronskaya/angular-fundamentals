@@ -96,14 +96,14 @@ export class CourseFormComponent implements OnInit {
     if (this.formGroupCourse.status === "VALID") {
       const authors = (<FormArray>this.formGroupCourse.get('authors')).controls.map((id:any)=>id.value);
       if (this.courseId) {
+
         this.courseService
           .editCourse({
             title: this.formGroupCourse.value.title,
             description: this.formGroupCourse.value.description,
             duration: this.formGroupCourse.value.duration,
-            authors: authors,
-            id: this.courseId,
-          })
+            authors: authors
+          }, this.courseId)
           .subscribe(()=>{
             this.router.navigate(['/'])
           });
@@ -157,24 +157,10 @@ export class CourseFormComponent implements OnInit {
   get courseAuthors() { return (<FormArray>this.formGroupCourse.get('authors')).controls }
 
   assignAuthor(authorId: any, index: number) {
-    // (<FormArray>this.formGroupCourse.get('authors')).push(new FormControl(authorId))
-    // const prevAllAuthors = this.allAuthorList$$.value;
-    // this.allAuthorList$$.next(prevAllAuthors.filter(a=> a.id != authorId));
     return false;
   }
 
   reAssignAuthor(authorId: any, index: number) {
-    // this.authorStoreService.authors$.pipe(map(authors=> authors.find(a=>a.id == authorId))).subscribe((author)=>{
-    //   if (author)
-    //   {
-    //     const prevAllAuthors = this.allAuthorList$$.value;
-    //     prevAllAuthors.push(author);
-    //     this.allAuthorList$$.next(prevAllAuthors);
-    //   }
-    // });
-    //
-    // const indexx = (<FormArray>this.formGroupCourse.get('authors')).controls.findIndex((id:any)=>id.value != authorId);
-    // (<FormArray>this.formGroupCourse.get('authors')).removeAt(indexx)
     return false;
   }
 

@@ -19,6 +19,7 @@ import {CommonModule} from "@angular/common";
 import {authFeatureKey, authReducer} from "./auth/store/auth.reducer";
 import {userFeatureKey, userReducer} from "./user/store/user.reduser";
 import {authorFeatureKey, authorReducer} from "./store/authors/authors.reducer";
+import {coursesFeatureKey, coursesReducer} from "./store/courses/courses.reducer";
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import {authorFeatureKey, authorReducer} from "./store/authors/authors.reducer";
     StoreModule.forRoot({ [authFeatureKey]: authReducer,
                                   [userFeatureKey]: userReducer,
                                   [authorFeatureKey]: authorReducer,
+                                  [coursesFeatureKey]: coursesReducer,
     }),
 
 

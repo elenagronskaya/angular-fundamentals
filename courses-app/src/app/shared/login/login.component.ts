@@ -19,30 +19,23 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.authStateFacade.getLoginSuccess$.subscribe(()=> {
-      debugger;
       this.userStateFacade.getCurrentUser();
-
     });
 
-
     this.userStateFacade.name$.subscribe((name: string | null)=>{
-         debugger;
          if (name)
          {
            this.router.navigate(['/courses']);
          }
-
     })
     this.authStateFacade.getLoginErrorMessage$.subscribe(()=>{
 
     });
-
   }
 
   onLoginSubmit(loginForm: NgForm): any{
     if (loginForm.status === "VALID") {
       this.authStateFacade.login(loginForm.form.value);
     }
-
   }
 }

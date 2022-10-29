@@ -58,7 +58,6 @@ export class AuthService {
       .pipe(catchError((error) => throwError(error)));
   }
 
-
   setAuth(): void {
       const isAuth = this.sessionStorageService.getToken() !== null;
       this.isAuthorized$$.next(isAuth);
