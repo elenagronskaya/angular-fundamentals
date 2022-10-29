@@ -9,6 +9,8 @@ import {CourseStoreService} from "../../services/course-store.service";
 import {AuthorStoreService} from "../../services/author-store.service";
 import {UserStoreService} from "../../user/user-store.service";
 import {CoursesStateFacade} from "../../store/courses/courses.facade";
+import {AuthStateFacade} from "../../auth/store/auth.facade";
+import {UserStateFacade} from "../../user/store/user.fasad";
 
 
 @Component({
@@ -24,6 +26,7 @@ export class CoursesComponent implements OnInit {
   constructor(private courseStoreService: CourseStoreService,
               private authorStoreService: AuthorStoreService,
               private userStoreService: UserStoreService,
+              private userStateFacade : UserStateFacade,
               private coursesStateFacade : CoursesStateFacade,
               private router: Router) {}
 
@@ -42,7 +45,7 @@ export class CoursesComponent implements OnInit {
   }
 
   get isEditable(): Observable<boolean> {
-    return this.userStoreService.isAdmin$;
+    return this.userStateFacade.isAdmin$;
   }
 
   onSearch(searchFilter: string) {
@@ -53,6 +56,7 @@ export class CoursesComponent implements OnInit {
   }
 
   onCreateCourse(event: any ) {
+    debugger;
     this.router.navigate(['/courses/add'])
   }
 
