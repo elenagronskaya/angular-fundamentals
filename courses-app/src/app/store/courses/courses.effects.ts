@@ -3,7 +3,7 @@ import {Actions, createEffect, ofType} from "@ngrx/effects";
 
 
 import {CourseService} from "../../services/course.service";
-import {map, mergeMap, of, tap} from "rxjs";
+import {forkJoin, map, mergeMap, of, tap} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {coursesActions} from "./courses.actions";
 import {AuthorsStateFacade} from "../authors/authors.facade";
@@ -49,6 +49,30 @@ export class CoursesEffects {
       )
     }
   )
+    /*     ?????????????????????????????? Errors !!!!!!!! How to resolove it??????
+  getAll$ = createEffect(() => {
+    return this.actions$.pipe(ofType(coursesActions.requestAllCourses),
+      forkJoin([
+        this.courseService.getAll(), this.authorsStateFacade.authors$]
+      ).pipe(
+        map(([allCourses, allAuthors]) => {
+          return allCourses.map((c) => new CourseDataDTO(
+            c.authors.map((authorId) => allAuthors.find(a => a.id == authorId)),
+            c.creationDate,
+            c.description,
+            c.duration,
+            c.id,
+            c.isEdited,
+            c.title));          }
+        )
+      )
+        .pipe(map( (data: CourseDataDTO[]) => {
+            return coursesActions.requestAllCoursesSuccess({courses: data});
+          },
+          catchError(() => of(coursesActions.requestAllCoursesFail(
+            {errorMessage: 'requestAllCourses failed'})))
+        ))
+  });*/
 
   filteredCourses$ = createEffect(() => {
       return this.actions$.pipe(
@@ -66,7 +90,7 @@ export class CoursesEffects {
                 }))
           }
         )
-      );
+      );  ;
     }
   )
 
