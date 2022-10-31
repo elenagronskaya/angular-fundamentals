@@ -16,7 +16,7 @@ export class SessionStorageService {
   }
 
   getToken(): string | null {
-    return window.sessionStorage.getItem(this.tokenKey);
+    return window.sessionStorage.getItem(this.tokenKey) ;
   }
 
   deleteToken() {

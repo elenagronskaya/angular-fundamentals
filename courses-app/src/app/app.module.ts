@@ -12,6 +12,15 @@ import {CourseFormModule} from "./shared/course-form/course-form.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { TokenInterceptor } from './auth/interceptors/token.interceptor';
 import {AuthModule} from "./auth/auth.module";
+import {StoreModule} from "@ngrx/store";
+import {EffectsModule} from "@ngrx/effects";
+import {effects, facades} from "./store";
+import {CommonModule} from "@angular/common";
+import {authFeatureKey, authReducer} from "./auth/store/auth.reducer";
+import {userFeatureKey, userReducer} from "./user/store/user.reduser";
+import {authorFeatureKey, authorReducer} from "./store/authors/authors.reducer";
+import {coursesFeatureKey, coursesReducer} from "./store/courses/courses.reducer";
+
 
 @NgModule({
   declarations: [
@@ -28,7 +37,16 @@ import {AuthModule} from "./auth/auth.module";
     FormsModule,
     ReactiveFormsModule,
     CourseFormModule,
-    AuthModule
+    AuthModule,
+    CommonModule,
+    StoreModule.forRoot({ [authFeatureKey]: authReducer,
+                                  [userFeatureKey]: userReducer,
+                                  [authorFeatureKey]: authorReducer,
+                                  [coursesFeatureKey]: coursesReducer,
+    }),
+
+
+    EffectsModule.forRoot(effects)
   ],
   providers: [
     {
@@ -36,7 +54,9 @@ import {AuthModule} from "./auth/auth.module";
       useClass: TokenInterceptor,
       multi: true,
     },
+    ...facades
   ],
+
   exports: [
   ],
   bootstrap: [AppComponent]

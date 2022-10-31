@@ -37,11 +37,7 @@ export class AuthService {
   login(data: ILoginData){
     return this.http
       .post<LoginResponse>(`${environment.baseUrl}/login`, data)
-      .pipe(
-        tap((response) => {
-          this.sessionStorageService.setToken(response.result)}),
-        catchError((error) => throwError(error))
-      );
+      .pipe(catchError((error) => throwError(error)));
   }
 
   logout():Observable<any>{
@@ -61,7 +57,6 @@ export class AuthService {
       .post<IRegistrationRequest>(`${environment.baseUrl}/register`, data)
       .pipe(catchError((error) => throwError(error)));
   }
-
 
   setAuth(): void {
       const isAuth = this.sessionStorageService.getToken() !== null;

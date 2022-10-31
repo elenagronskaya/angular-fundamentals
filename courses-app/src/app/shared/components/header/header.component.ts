@@ -1,9 +1,9 @@
-import {Component} from "@angular/core";
-import {AuthService} from "../../../auth/services/auth.service";
+import {Component, OnInit} from "@angular/core";
 import {SessionStorageService} from "../../../auth/services/session-storage.service";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
-import {UserStoreService} from "../../../user/user-store.service";
+import {UserStateFacade} from "../../../user/store/user.fasad";
+import {AuthStateFacade} from "../../../auth/store/auth.facade";
 
 @Component({
   selector: 'app-header',
@@ -11,35 +11,32 @@ import {UserStoreService} from "../../../user/user-store.service";
   styleUrls: ['header.component.scss']
 })
 
-export class HeaderComponent {
-  isLogin$: Observable<boolean>;
-  login = 'Login';
-  logout = 'Logout';
+export class HeaderComponent implements OnInit{
 
-  constructor(private authService: AuthService,
+  constructor(private authStateFacade: AuthStateFacade,
               private sessionStorage: SessionStorageService,
-              private userStoreService: UserStoreService,
+              private userStateFacade: UserStateFacade,
               private router: Router) {
-    this.isLogin$ =  this.authService.isAuthorized$;
+
   }
 
-  loginlogOut(): void {
-    this.isLogin$.subscribe((value)=>{
-      if (value) {
-        this.doLogout()
-      }else {
-        this.router.navigate(['/login']);
-      }
-    }
-    );
-  }
-  get userName(): Observable<string> {
-    return this.userStoreService.name$;
+  get userName$(): Observable<string | null> {
+    return this.userStateFacade.name$;
   }
 
-  doLogout() {
-    this.authService.logout().subscribe(()=>{this.router.navigate(['/login'])}
-    );
+  get isAuthorized$() : Observable<boolean> {
+    return this.authStateFacade.isAuthorized$;
+  }
+
+  logout() {
+    this.authStateFacade.closeSession();
+  }
+
+  ngOnInit(): void {
+    this.authStateFacade.getLogoutSuccess$.subscribe(()=>{
+     this.userStateFacade.cleanUserData();
+     this.router.navigate(['/login']);
+    })
   }
 }
 

@@ -3,13 +3,13 @@
   <ng-container *ngIf="courses | async as similarCourses">
     <app-info *ngIf="!(similarCourses) || !similarCourses.length" [title]="'Your list is empty'"
               [text]="'Please use the \'\'Add new course\'\' button to add your first course'">
-      <app-button [text]="'Add new course'" (click)="onCreateCourse($event)" ></app-button>
+      <app-button *ngIf="isEditable | async" [text]="'Add new course'" (click)="onCreateCourse($event)" ></app-button>
     </app-info>
   </ng-container>
 
   <ng-container *ngIf="(courses | async) as similarCourses">
 
-  <app-button *ngIf="similarCourses?.length" [text]="'Add new course'" (click)="onCreateCourse($event)" >
+  <app-button *ngIf="similarCourses?.length && (isEditable | async)" [text]="'Add new course'" (click)="onCreateCourse($event)" >
   </app-button>
 
   </ng-container>

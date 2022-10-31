@@ -32,12 +32,12 @@ export class CourseService {
       }));
   }
 
-  createCourse(course: ICourseData): Observable<ICourseData> {
+  createCourse(course: { duration: any; description: any; title: any; authors: any[] }): Observable<ICourseData> {
     return this.http.post<ICourseData>(`${environment.baseUrl}/courses/add`, { ...course });
   }
 
-  editCourse(course: ICourseData): Observable<ICourseData> {
-    return this.http.put<ICourseData>(`${environment.baseUrl}/courses/${course.id}`, { ...course });
+  editCourse(course: { duration: any; description: any; title: any; authors: any[] }, id: string): Observable<ICourseData> {
+    return this.http.put<ICourseData>(`${environment.baseUrl}/courses/${id}`, { ...course, id:id });
   }
 
   deleteCourse(id: string) : Observable<any> {
